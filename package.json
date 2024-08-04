@@ -1,0 +1,39 @@
+{
+  "name": "@lithium-framework/router-element",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clear:dist": "rm -rf dist",
+    "clear:cache": "rm -rf .parcel-cache",
+    "clear": "npm run clear:dist && npm run clear:cache",
+    "watch": "npm run clear && parcel watch src/index.ts --log-level verbose",
+    "build": "npm run clear && parcel build src/index.ts --log-level verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lithium-framework/router"
+  },
+  "homepage": "https://lithium-framework.github.io/lithium.io/",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@lithium-framework/core": "^1.6.0",
+    "@swc/helpers": "^0.5.12",
+    "install": "^0.13.0",
+    "route-recognizer": "^0.3.4",
+    "urlpattern-polyfill": "^10.0.0"
+  },
+  "devDependencies": {
+    "@parcel/packager-ts": "^2.12.0",
+    "@parcel/transformer-typescript-types": "^2.12.0",
+    "parcel": "^2.12.0",
+    "typescript": "^5.5.4"
+  },
+  "files": [
+    "dist"
+  ]
+}
