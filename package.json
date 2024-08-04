@@ -17,11 +17,13 @@
     "type": "git",
     "url": "https://github.com/lithium-framework/router"
   },
+  "homepage": "https://lithium-framework.github.io/lithium.io/",
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@lithium-framework/core": "^1.6.0",
     "@swc/helpers": "^0.5.12",
+    "install": "^0.13.0",
     "route-recognizer": "^0.3.4",
     "urlpattern-polyfill": "^10.0.0"
   },
