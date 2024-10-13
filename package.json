@@ -21,11 +21,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@lithium-framework/core": "^1.6.0",
+    "@lithium-framework/core": "^1.8.5-0",
     "@swc/helpers": "^0.5.12",
-    "install": "^0.13.0",
-    "route-recognizer": "^0.3.4",
-    "urlpattern-polyfill": "^10.0.0"
+    "install": "^0.13.0"
   },
   "devDependencies": {
     "@parcel/packager-ts": "^2.12.0",
