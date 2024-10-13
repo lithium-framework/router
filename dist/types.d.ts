@@ -1,6 +1,10 @@
 import { WebComponent } from "@lithium-framework/core";
 export class HashRouterElement extends WebComponent {
     path: string;
+    element: any;
+    setElement(template: any): void;
+    activate(): void;
+    deactivate(): void;
 }
 export class HashRouter extends WebComponent {
     currentRoute: string;

@@ -1,13 +1,34 @@
-import { WebComponent, html, css, customElement, state } from "@lithium-framework/core";
+import { WebComponent, html, css, customElement, attr , state , render } from "@lithium-framework/core";
 
 // Chaque élément correspond à une vue spécifique, identifiable via l'attribut `path`.
+// Les callbacks sont appelés lorsque la route est activée.
 @customElement({
   name: 'hash-router-element',
-  template: html`<slot></slot>` // Affiche son contenu via un slot
+  template: html`<slot></slot>` // Contenu via slot dynamique
 })
 export class HashRouterElement extends WebComponent {
-  // Attribut 'path' qui spécifie à quelle route cet élément est associé
-  @state() path: string = "";
+  @attr() path: string = "";
+  @state() element: any = null; // Stocke le modèle (template)
+
+  // Méthode pour définir un template à rendre lors de l'activation de la route
+  setElement(template: any) {
+    this.element = template;
+  }
+
+  // Méthode appelée lorsque la route devient active
+  activate() {
+    // Utiliser Lithium pour rendre le contenu dynamique
+    this.innerHTML = ""; // Vider le contenu précédent
+    if (this.element) {
+      render(this.element, this); // Rendre le template dans l'élément
+    }
+    this.style.display = 'block';  // Affiche l'élément
+  }
+
+  // Méthode appelée lorsque la route devient inactive
+  deactivate() {
+    this.style.display = 'none'; // Masque l'élément
+  }
 }
 
 // Template pour `hash-router`
@@ -34,9 +55,7 @@ export class HashRouter extends WebComponent {
 
     connectedCallback() {
         super.connectedCallback();
-        // Initialiser la route courante
         this.updateRoute();
-        // Écouter les changements de hash
         window.addEventListener('hashchange', () => this.updateRoute());
     }
 
@@ -46,19 +65,20 @@ export class HashRouter extends WebComponent {
         this.updateVisibleElements();
     }
 
-    // Fonction qui gère l'affichage des éléments en fonction de la route
+    // Fonction qui gère l'affichage et les callbacks des éléments enfants
     updateVisibleElements() {
-        const children = Array.from(this.children) as HTMLElement[];
+        const children = Array.from(this.children) as HashRouterElement[];
 
-        children.forEach((child: any) => {
-            // Rejeter tout enfant qui n'est pas un `hash-router-element`
-            if (!(child instanceof HashRouterElement)) {
-                console.warn(`Element non valide dans hash-router: `, child);
-                return;
+        children.forEach((child) => {
+            // Si l'élément est un `hash-router-element`
+            if (child instanceof HashRouterElement) {
+                // Activer l'élément si son path correspond à la route
+                if (child.getAttribute("path") === this.currentRoute) {
+                    child.activate();
+                } else {
+                    child.deactivate();
+                }
             }
-
-            // Afficher ou masquer les `hash-router-element` en fonction de la route
-            child.style.display = child.path === this.currentRoute ? 'block' : 'none';
         });
     }
 }

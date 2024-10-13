@@ -11,19 +11,38 @@ $parcel$export(module.exports, "HashRouter", () => $882b6d93070905b3$export$7221
 
 
 class $882b6d93070905b3$export$adb0b68179a3aea3 extends (0, $8zHUo$lithiumframeworkcore.WebComponent) {
+    // Méthode pour définir un template à rendre lors de l'activation de la route
+    setElement(template) {
+        this.element = template;
+    }
+    // Méthode appelée lorsque la route devient active
+    activate() {
+        // Utiliser Lithium pour rendre le contenu dynamique
+        this.innerHTML = ""; // Vider le contenu précédent
+        if (this.element) (0, $8zHUo$lithiumframeworkcore.render)(this.element, this); // Rendre le template dans l'élément
+        this.style.display = "block"; // Affiche l'élément
+    }
+    // Méthode appelée lorsque la route devient inactive
+    deactivate() {
+        this.style.display = "none"; // Masque l'élément
+    }
     constructor(...args){
         super(...args);
-        // Attribut 'path' qui spécifie à quelle route cet élément est associé
         this.path = "";
+        this.element = null // Stocke le modèle (template)
+        ;
     }
 }
 (0, $8zHUo$swchelperscjs_ts_decoratecjs._)([
-    (0, $8zHUo$lithiumframeworkcore.state)()
+    (0, $8zHUo$lithiumframeworkcore.attr)()
 ], $882b6d93070905b3$export$adb0b68179a3aea3.prototype, "path", void 0);
+(0, $8zHUo$swchelperscjs_ts_decoratecjs._)([
+    (0, $8zHUo$lithiumframeworkcore.state)()
+], $882b6d93070905b3$export$adb0b68179a3aea3.prototype, "element", void 0);
 $882b6d93070905b3$export$adb0b68179a3aea3 = (0, $8zHUo$swchelperscjs_ts_decoratecjs._)([
     (0, $8zHUo$lithiumframeworkcore.customElement)({
         name: "hash-router-element",
-        template: (0, $8zHUo$lithiumframeworkcore.html)`<slot></slot>` // Affiche son contenu via un slot
+        template: (0, $8zHUo$lithiumframeworkcore.html)`<slot></slot>` // Contenu via slot dynamique
     })
 ], $882b6d93070905b3$export$adb0b68179a3aea3);
 // Template pour `hash-router`
@@ -39,9 +58,7 @@ const $882b6d93070905b3$var$routerStyles = (0, $8zHUo$lithiumframeworkcore.css)`
 class $882b6d93070905b3$export$7221d69dcfc8e36b extends (0, $8zHUo$lithiumframeworkcore.WebComponent) {
     connectedCallback() {
         super.connectedCallback();
-        // Initialiser la route courante
         this.updateRoute();
-        // Écouter les changements de hash
         window.addEventListener("hashchange", ()=>this.updateRoute());
     }
     // Fonction qui met à jour la route en fonction du hash de l'URL
@@ -49,17 +66,16 @@ class $882b6d93070905b3$export$7221d69dcfc8e36b extends (0, $8zHUo$lithiumframew
         this.currentRoute = window.location.hash || "#";
         this.updateVisibleElements();
     }
-    // Fonction qui gère l'affichage des éléments en fonction de la route
+    // Fonction qui gère l'affichage et les callbacks des éléments enfants
     updateVisibleElements() {
         const children = Array.from(this.children);
         children.forEach((child)=>{
-            // Rejeter tout enfant qui n'est pas un `hash-router-element`
-            if (!(child instanceof $882b6d93070905b3$export$adb0b68179a3aea3)) {
-                console.warn(`Element non valide dans hash-router: `, child);
-                return;
+            // Si l'élément est un `hash-router-element`
+            if (child instanceof $882b6d93070905b3$export$adb0b68179a3aea3) {
+                // Activer l'élément si son path correspond à la route
+                if (child.getAttribute("path") === this.currentRoute) child.activate();
+                else child.deactivate();
             }
-            // Afficher ou masquer les `hash-router-element` en fonction de la route
-            child.style.display = child.path === this.currentRoute ? "block" : "none";
         });
     }
     constructor(...args){
